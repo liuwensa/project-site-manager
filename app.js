@@ -13,7 +13,7 @@ const http          = require('http');
 const ejs           = require('ejs');
 const ejsLayout     = require('express-ejs-layouts');
 
-var site = require('./controller/site');
+// var site = require('./controller/site');
 var routes = require('./routes/index');
 
 //加入自定义filter
@@ -40,19 +40,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieSession({key: 'sm', secret: config.secret}));
 app.use(express.static(path.join(__dirname, 'public')));
-
-app.use((req, res, next) => {
-  res.locals.title       = '站点管理系统';
-  res.locals.description = '站点管理系统';
-  res.locals.sites       = config.sites;
-  res.locals.servers     = config.servers;
-  if (req.session.alert) {
-    res.locals.alert  = req.session.alert;
-    req.session.alert = null;
-  }
-  next();
-})
-;
 
 app.use('/', routes);
 
@@ -92,7 +79,7 @@ app.use(function (err, req, res, next) {
 app.set('port', config.port);
 
 const server = http.createServer(app);
-site.socket(server);
+// site.socket(server);
 
 server.listen(app.get('port'), function (err) {
   if (err) {

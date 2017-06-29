@@ -3,20 +3,40 @@
 const cp       = require('child_process');
 const socketio = require('socket.io');
 
-exports.site = function (req, res, next) {
-  const key     = req.params.site;
-  let server  = '';
-  const sites   = config.sites;
-  const servers = config.servers;
-  if (Array.isArray(sites[key].host)) {
-    server = sites[key].host[0];
-    if (req.query.server && servers[server]) {
-      server = req.query.server;
+
+const ProjectService = require('../services/project');
+
+exports.site = async function (req, res, next) {
+  const proID    = req.params.proID;
+  const serverID = req.query.serverID || '';
+
+  const proDtl = await ProjectService.getProjectDtl({_id: proID});
+
+  const servers = proDtl.servers;
+
+  res.locals.menu    = 'site';
+  res.locals.proID   = proID;
+  res.locals.proDtl  = proDtl;
+  res.locals.servers = servers;
+
+  let serverHost;
+
+  if (serverID) {
+    res.locals.serverID = serverID;
+    for (let i = 0, len = servers.length; i < len; i++) {
+      if (servers[i]._id === serverID) {
+        serverHost = servers[i].host;
+        break;
+      }
     }
   } else {
-    server = sites[key].host;
+    res.locals.serverID   = servers[0]._id;
+    serverHost = servers[0].host;
   }
-  res.render('site.html', {menu: 'site', key: key, server: server});
+
+  res.locals.serverHost = `${serverHost}:${config.port}`;
+
+  res.render('site.html');
 };
 
 exports.socket = function (server) {
@@ -67,29 +87,28 @@ exports.socket = function (server) {
 
 // 构建命令
 function _makeCmd(data) {
-  const sites = config.sites;
-  let cmd   = '';
-  let args  = [];
-  let cwd   = '';
+  let cmd     = '';
+  let args    = [];
+  let cwd     = '';
   switch (data.cmd) {
     case 'pull':
       cmd  = 'git';
       args = ['pull'];
-      cwd  = sites[data.site].proPath;
+      cwd  = data.proPath;
       break;
     case 'restart':
-      cmd  = sites[data.site].restart.cmd;
-      args = sites[data.site].restart.args;
+      cmd  = 'pm2';
+      args = ['restart', data.eName];
       cwd  = '';
       break;
     case 'npm':
       cmd  = 'npm';
       args = ['install'];
-      cwd  = sites[data.site].proPath;
+      cwd  = data.proPath;
       break;
     case 'log':
       cmd  = 'tail';
-      args = ['-f', `${sites[data.site].logPath }/log-${new Date().Format('yyyyMMdd')}`];
+      args = ['-f', `${data.logPath }/log-${new Date().Format('yyyyMMdd')}`];
       cwd  = '';
       break;
   }

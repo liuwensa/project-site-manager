@@ -12,32 +12,29 @@
     <section class="content">
       <ol class="breadcrumb">
         <li>站点管理</li>
-        <li class="active"><%= sites[key].name %></li>
+        <li class="active"><%= proDtl.name %></li>
       </ol>
       <!-- CONTENT -->
       <div class="main-content">
-        <% include ./shared/alert.html %>
         <div class="row">
           <div class="col-md-12">
             <form>
               <div class="row">
-                <h4 class="col-md-2"><%= sites[key].name %></h4>
+                <h4 class="col-md-2"><%= proDtl.name %></h4>
                 <div class="col-md-6">
-                  <p>服务器节点：<% if(Array.isArray(sites[key].host)) {%><% for(var i=0;i
-                    <sites
-                    [key].host.length ;i++) {%>
-                    <% if(locals.server&&server===sites[key].host[i]) {%>
-                    <span class="label label-default"><%= sites[key].host[i] %></span>
+                  <p>服务器节点：
+                    <% for(var i=0; i < servers.length ;i++) {%>
+                    <% if(locals.serverID && serverID === servers[i]._id) {%>
+                    <span class="label label-default"><%= servers[i].host%></span>
                     <%} else {%>
-                    <span class="label"><a href="?server=<%= sites[key].host[i] %>"><%= sites[key].host[i] %></a></span>
+                    <span class="label">
+                      <a href="?serverID=<%= servers[i]._id %>"><%= servers[i].host %></a></span>
                     <% } %>
-                    <%}} else {%>
-                    <span class="label label-default"><%= sites[key].host %></span>
                     <%}%>
                 </div>
                 <div class="col-md-4">
                   <p class="header-info">
-                    <input type="hidden" id="status" value="play" />
+                    <input type="hidden" id="status" value="play"/>
                     <button type="button" class="btn btn-primary" id="pause"
                             onclick="$(this).hide();$('#play').show();$('#status').val('pause'); return;">
                       <i class="fa fa-pause"> 暂停</i>
@@ -52,14 +49,12 @@
                     <button type="button" class="btn btn-primary executive" name="pull">
                       <i class="fa fa-download"> git pull </i>
                     </button>
-                    <% if(sites[key].type==='node') {%>
                     <button type="button" class="btn btn-primary executive" name="restart">
                       <i class="fa fa-repeat"> restart </i>
                     </button>
                     <button type="button" class="btn  btn-primary executive" name="npm">
                       <i class="fa fa-road"> npm install </i>
                     </button>
-                    <% } %>
                   </p>
                 </div>
               </div>
@@ -83,16 +78,11 @@
 <script type="text/javascript">
   $(function () {
     //与指定的服务器节点建立soket连接
-    var socket = io('<%= servers[server].host %>/socket/site');
+    var socket = io('<%= serverHost %>/socket/site');
     socket.on('connect', function () {
-      <%
-      if (sites[key].type === 'node') {%>
-        //动态站，连接后显示站点日志
-        var data = {cmd: 'log', site: '<%= key %>', server: '<%= server %>'};
-        socket.emit('exec', data);
-      <%
-      }
-      %>
+      // 动态站，连接后显示站点日志
+      var data = {cmd: 'log', logPath: '<%= proDtl.logPath%>'};
+      socket.emit('exec', data);
     });
 
     // 服务器站数据显示
@@ -117,7 +107,7 @@
 
     //点击按钮后，通过socket将要执行的操作传递给服务器
     $('button.executive').click(function () {
-      var data = {cmd: '', site: '<%= key %>', server: '<%= server %>'};
+      var data = {cmd: '', proPath: '<%= proDtl.proPath%>', eName: '<%= proDtl.eName%>'};
       data.cmd = $(this).prop('name');
       socket.emit('exec', data);
     })

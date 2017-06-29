@@ -8,11 +8,19 @@ const adminUser = require('../services/adminUser');
 
 module.exports = {
   getAdminUsers,
+  getUser,
   addUser
 };
 
 async function getAdminUsers(req, res) {
   const users = await adminUser.getAdminUsers();
+  return res.json({code: 0, msg: users});
+}
+
+async function getUser(req, res) {
+  const id = req.params.id;
+
+  const users = await adminUser.getUser({_id: id});
   return res.json({code: 0, msg: users});
 }
 

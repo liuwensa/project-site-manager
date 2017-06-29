@@ -29,7 +29,7 @@ async function postLogin(req, res, next) {
   if (userInfo.password !== password) {
     return res.render('login', {message: '密码不正确！'});
   }
-  req.session.user = userInfo;
+  req.session.userAccount = account;
   const authToken  = tool.encrypt(userInfo._id + '\t' + userInfo.role + '\t' + userInfo.account, config.secret);
 
   // 会话cookie
@@ -40,20 +40,21 @@ async function postLogin(req, res, next) {
 
 // 退出登录
 async function logout(req, res, next) {
-  if (req.session.user) {
-    delete req.session.user;
-  }
-  if (req.user) {
-    req.user = null;
+  if (req.session.userAccount) {
+    delete req.session.userAccount;
   }
   res.clearCookie(config.cookieName, {path: '/'});
   res.redirect('/');
 }
 
 async function checkAuth(req, res, next) {
-  if (req.session.user && req.session.user.role) {
-    res.locals.user = req.session.user;
-    req.user        = req.session.user;
+  if (req.session.userAccount) {
+    const account = req.session.userAccount;
+    const userInfo = await user.getUser({account: account});
+
+    res.locals.projects = userInfo.projects;
+    res.locals.user     = userInfo;
+
     next();
   } else {
     res.redirect('/login');

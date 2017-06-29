@@ -15,7 +15,7 @@ async function getAdminUsers() {
 }
 
 async function getUser(options) {
-  return db.AdminUser.findOne(options);
+  return db.AdminUser.findOne(options).populate('projects');
 }
 
 async function addUser(options) {

@@ -20,7 +20,7 @@ const AdminUserSchema = new Schema({
   nickname: {type: String, default: '', comment: '昵称'},
   password: {type: String, default: 'e10adc3949ba59abbe56e057f20f883e', comment: '初始密码为123456'},
   role    : {type: String, default: 'user', comment: '权限'},
-  servers : [{type: String, ref: 'Project'}],
+  projects: [{type: String, ref: 'Project'}],
   date    : {type: Date, default: Date.now}
 });
 

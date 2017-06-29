@@ -11,16 +11,18 @@ const Servers = require('./Servers');
 const Schema = mongoose.Schema;
 
 const ProjectSchema = new Schema({
-  _id     : {
-    type     : String,
-    unique   : true,
-    'default': shortid.generate
+  _id    : {
+    type   : String,
+    unique : true,
+    default: shortid.generate
   },
-  name    : String,
-  date    : {type: Date, default: Date.now},
-  servers : [{type: String, ref: 'Servers'}],
-  proPath : String,
-  logPath : String
+  name   : String,
+  eName  : String,
+  type   : String,
+  date   : {type: Date, default: Date.now},
+  servers: [{type: String, ref: 'Servers'}],
+  proPath: String,
+  logPath: String
 });
 
 const Project = mongoose.model('Project', ProjectSchema);
