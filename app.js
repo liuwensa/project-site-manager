@@ -13,7 +13,7 @@ const http          = require('http');
 const ejs           = require('ejs');
 const ejsLayout     = require('express-ejs-layouts');
 
-// var site = require('./controller/site');
+var site = require('./controller/site');
 var routes = require('./routes/index');
 
 //加入自定义filter
@@ -25,14 +25,14 @@ app.disable('x-powered-by');
 app.enable('trust proxy');
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.engine('.html', ejsFilter.__express);
-app.set('view engine', 'html');
-app.set('layout', 'layout');
-app.use(ejsLayout);
-
 // app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'ejs');
+// app.engine('.html', ejsFilter.__express);
+// app.set('view engine', 'html');
+// app.set('layout', 'layout');
+// app.use(ejsLayout);
+
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
 
 app.use(favicon());
 app.use(log4js.connectLogger(logger, config.log));

@@ -12,11 +12,8 @@ const site      = require('../controller/site');
 const router = express.Router();
 
 router.get('/', login.checkAuth, (req, res) => {
-  res.render('index', {title: '站点管理系统', layout: 'layout', menu: 'index'});
-});
-
-router.get('/test', login.checkAuth, (req, res) => {
-  res.render('starter');
+  res.locals.menus = 'index';
+  res.render('index');
 });
 
 router.route('/login')

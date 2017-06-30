@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>AdminLTE 2 | Starter</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.6 -->
+    <link href="http://static.oa.com/libs/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://static.oa.com/libs/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="http://static.oa.com/libs/ionicons/2.0.0/css/ionicons.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="/css/skin-blue.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+    <!-- Main Header -->
+    <header class="main-header">
+        <!-- Logo -->
+        <a href="/" class="logo">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <span class="logo-mini"><b>A</b>LT</span>
+            <!-- logo for regular state and mobile devices -->
+            <span class="logo-lg"><b>Admin</b>LTE</span>
+        </a>
+
+        <!-- Header Navbar -->
+        <nav class="navbar navbar-static-top" role="navigation">
+            <!-- Sidebar toggle button-->
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                <span class="sr-only">Toggle navigation</span>
+            </a>
+            <!-- Navbar Right Menu -->
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <!-- User Account Menu -->
+                    <li class="dropdown user user-menu">
+                        <!-- Menu Toggle Button -->
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                           <span class="hidden-xs"><%= user.nickname%></span>
+                        </a>
+                        <!--<ul class="dropdown-menu">-->
+                            <!--&lt;!&ndash; The user image in the menu &ndash;&gt;-->
+                            <!--<li>-->
+                                <!--<p>-->
+                                    <!--<%= user.nickname%>-->
+                                    <!--<small><%= user.account%></small>-->
+                                <!--</p>-->
+                            <!--</li>-->
+                            <!--&lt;!&ndash; Menu Footer&ndash;&gt;-->
+                            <!--<li class="user-footer">-->
+                                <!--<div class="pull-right">-->
+                                    <!--<a href="/logout" class="btn btn-default btn-flat">Sign out</a>-->
+                                <!--</div>-->
+                            <!--</li>-->
+                        <!--</ul>-->
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside class="main-sidebar">
+
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+            <!-- Sidebar Menu -->
+            <ul class="sidebar-menu">
+                <li <%if(locals.menus && locals.menus === 'index') {%>class="active"<%}%>>
+                    <a href="/">
+                        <i class="fa fa-link"></i>
+                        <span>Home</span>
+                    </a>
+                </li>
+                <li class="treeview <%if(locals.menus && locals.menus === 'site') {%>active<%}%>">
+                    <a href="#">
+                        <i class="fa fa-link"></i>
+                        <span>站点管理</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <% for(let i = 0, len = projects.length; i < len; i++) {%>
+                        <li <%if(locals.proID && locals.proID === projects[i]._id) {%>class="active"<%}%>>
+                            <a href="/admin/projects/<%= projects[i]._id %>">
+                                <span><%= projects[i].name %></span>
+                            </a>
+                        </li>
+                        <% } %>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+    </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Main content -->
+        <section class="content">
+            <% if (locals.menus && locals.menus === 'site') { %>
+            <% include content.ejs %>
+            <% } else{ %>
+            Your Page Content Here
+            <% } %>
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED JS SCRIPTS -->
+<script src="http://static.oa.com/libs/jquery/2.2.0/jquery-2.2.0.min.js"></script>
+<script src="http://static.oa.com/libs/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<!-- AdminLTE App -->
+<script src="/js/app.min.js"></script>
+</body>
+</html>

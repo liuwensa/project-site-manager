@@ -3,7 +3,6 @@
 const cp       = require('child_process');
 const socketio = require('socket.io');
 
-
 const ProjectService = require('../services/project');
 
 exports.site = async function (req, res, next) {
@@ -14,7 +13,7 @@ exports.site = async function (req, res, next) {
 
   const servers = proDtl.servers;
 
-  res.locals.menu    = 'site';
+  res.locals.menus    = 'site';
   res.locals.proID   = proID;
   res.locals.proDtl  = proDtl;
   res.locals.servers = servers;
@@ -36,7 +35,7 @@ exports.site = async function (req, res, next) {
 
   res.locals.serverHost = `${serverHost}:${config.port}`;
 
-  res.render('site.html');
+  res.render('index');
 };
 
 exports.socket = function (server) {
@@ -102,7 +101,7 @@ function _makeCmd(data) {
       cwd  = '';
       break;
     case 'npm':
-      cmd  = 'npm';
+      cmd  = 'cnpm';
       args = ['install'];
       cwd  = data.proPath;
       break;
