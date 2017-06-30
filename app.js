@@ -1,6 +1,6 @@
 'use strict';
 
-require('./global-variable');
+require('./globals');
 
 const express       = require('express');
 const path          = require('path');
@@ -11,25 +11,12 @@ const session       = require('express-session');
 const cookieSession = require('cookie-session');
 const http          = require('http');
 const ejs           = require('ejs');
-const ejsLayout     = require('express-ejs-layouts');
 
-var site = require('./controller/site');
-var routes = require('./routes/index');
+const site         = require('./controller/site');
+const resultHandle = require('./middlewares/result-handle');
+const routes       = require('./routes/index');
 
-//加入自定义filter
-const ejsFilter = require('./lib/utils/filter').filter(ejs);
-
-var app = express();
-
-app.disable('x-powered-by');
-app.enable('trust proxy');
-
-// view engine setup
-// app.set('views', path.join(__dirname, 'views'));
-// app.engine('.html', ejsFilter.__express);
-// app.set('view engine', 'html');
-// app.set('layout', 'layout');
-// app.use(ejsLayout);
+const app = express();
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -43,43 +30,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 
-/// catch 404 and forwarding to error handler
-app.use(function (req, res, next) {
-  var err    = new Error('Not Found');
-  err.status = 404;
-  next(err);
+// catch 404 and forward to error handler
+app.use((req, res, next) => {
+  return next({status: 'notFound', code: 404});
 });
 
-/// error handlers
+app.use(resultHandle.resultHandle({format: 'JSON', views: {}}));
 
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-  app.use(function (err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-      message: err.message,
-      error  : err,
-      layout : false
-    });
-  });
-}
-
-// production error handler
-// no stacktraces leaked to user
-app.use(function (err, req, res, next) {
-  res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error  : {},
-    layout : false
-  });
-});
 
 app.set('port', config.port);
 
 const server = http.createServer(app);
-// site.socket(server);
+site.socket(server);
 
 server.listen(app.get('port'), function (err) {
   if (err) {
