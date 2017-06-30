@@ -1,0 +1,1 @@
+本项目基于Socket.io和child_process模块，实时日志查看、git pull代码、基于pm2重启项目、npm包安装。
