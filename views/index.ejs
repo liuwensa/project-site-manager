@@ -99,6 +99,32 @@
                         <% } %>
                     </ul>
                 </li>
+                <li class="treeview <%if(locals.menus && locals.menus === 'admin') {%>active<%}%>">
+                    <a href="#">
+                        <i class="fa fa-link"></i>
+                        <span>业务管理</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li <%if(0) {%>class="active"<%}%>>
+                            <a href="/">
+                                <span>服务器管理</span>
+                            </a>
+                        </li>
+                        <li <%if(0) {%>class="active"<%}%>>
+                            <a href="/">
+                                <span>项目管理</span>
+                            </a>
+                        </li>
+                        <li <%if(0) {%>class="active"<%}%>>
+                            <a href="/">
+                                <span>人员管理</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
             </ul>
         </section>
     </aside>
