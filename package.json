@@ -15,6 +15,7 @@
     "express": "~4.0.0",
     "express-ejs-layouts": "^1.1.0",
     "express-session": "^1.11.3",
+    "fs-extra": "^4.0.1",
     "iconv-lite": "^0.4.10",
     "log4js": "^1.1.1",
     "mongoose": "^4.9.4",
