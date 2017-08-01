@@ -1,0 +1,58 @@
+.mt10 {
+    margin-top: 10px;
+}
+
+.mt20 {
+    margin-top: 20px;
+}
+
+.mb10 {
+  margin-bottom: 10px;
+}
+
+.fly-to-top {
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    width: 40px;
+    height: 75px;
+    background: url('../img/fly-to-top.png') left top no-repeat;
+    cursor: pointer;
+}
+
+.fly-to-top:hover {
+    background-position: left bottom;
+}
+
+.link-like-btn {
+    border: none;
+    background-color: transparent;
+}
+.link-like-btn:focus {
+    outline: none;
+}
+.btn-up {
+    color: #5cc56f;
+}
+.btn-down {
+    color: #ff7e7e;
+}
+
+/*Change the  vertical-align of td from top to middle */
+.table > tbody > tr > td {
+    vertical-align: middle;
+    text-align: center;
+}
+
+.table > thead > tr > th {
+    text-align: center;
+}
+
+.navbar-nav {
+    line-height: 50px;
+    color: #fff;
+}
+.navbar-nav > li {
+    padding: 0 15px;
+    font-size: 16px;
+}

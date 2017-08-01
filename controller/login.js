@@ -16,6 +16,7 @@ async function getLogin(req, res, next) {
 async function postLogin(req, res, next) {
   const {account, password} = req.body;
 
+  console.log(account, password)
   if (!account || !password) {
     return res.render('login', {message: '账号或者密码不能为空！'});
   }
@@ -30,11 +31,12 @@ async function postLogin(req, res, next) {
     return res.render('login', {message: '密码不正确！'});
   }
   req.session.userAccount = account;
-  const authToken  = tool.encrypt(userInfo._id + '\t' + userInfo.role + '\t' + userInfo.account, config.secret);
+  // const authToken  = tool.encrypt(userInfo._id + '\t' + userInfo.role + '\t' + userInfo.account, config.secret);
 
   // 会话cookie
-  res.cookie(config.cookieName, authToken, {path: '/'});
-  res.redirect('/')
+  // res.cookie(config.cookieName, authToken, {path: '/'});
+  // res.redirect('/')
+  return res.json({code: 0, msg: '登录成功！'});
 }
 
 
@@ -43,7 +45,7 @@ async function logout(req, res, next) {
   if (req.session.userAccount) {
     delete req.session.userAccount;
   }
-  res.clearCookie(config.cookieName, {path: '/'});
+  // res.clearCookie(config.cookieName, {path: '/'});
   res.redirect('/');
 }
 

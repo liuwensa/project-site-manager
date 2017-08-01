@@ -11,7 +11,8 @@
                             <span class="label label-default"><%= servers[i].host %></span>
                             <% } else { %>
                             <span class="label">
-      <a href="?serverID=<%= servers[i]._id %>"><%= servers[i].host %></a></span>
+                                <a href="?serverID=<%= servers[i]._id %>"><%= servers[i].host %></a>
+                            </span>
                             <% } %>
                             <% } %>
                     </div>
@@ -44,12 +45,50 @@
                 <hr class="no-top-margin">
                 <div class="row">
                     <div class="col-md-12 col-sm-10">
-  <pre id="log"
-       style="background-color:#000; color:#fff; height:850px;overflow-x:hidden;overflow-y:auto; ">
-  </pre>
+                        <pre id="log" style="background-color:#000; color:#fff; height:850px;overflow-x:hidden;overflow-y:auto; "></pre>
                     </div>
                 </div>
             </form>
         </div>
     </div>
 </div>
+<script src="http://static.oa.com/libs/jquery/2.2.0/jquery-2.2.0.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script type="text/javascript">
+  $(function () {
+    //与指定的服务器节点建立soket连接
+    var socket = io('<%= serverHost %>/socket/site');
+    socket.on('connect', function () {
+      // 动态站，连接后显示站点日志
+      var data = {cmd: 'log', logPath: '<%= proDtl.logPath%>'};
+      socket.emit('exec', data);
+    });
+
+    // 服务器站数据显示
+    socket.on('data', function (data) {
+      //状态判断，处理监听状态时打印数据到页面
+      if (document.getElementById('status').value === 'play') {
+        var log       = document.getElementById('log');
+        log.innerHTML = log.innerHTML + data;
+        log.scrollTop = Math.max(0, log.scrollHeight - log.offsetHeight);
+      }
+    });
+
+    //日志监控进程退出后的处理
+    socket.on('close', function (msg) {
+      console.log(msg)
+    });
+
+    //错误处理
+    socket.on('err', function (msg) {
+      console.log(msg)
+    });
+
+    //点击按钮后，通过socket将要执行的操作传递给服务器
+    $('button.executive').click(function () {
+      var data = {cmd: '', proPath: '<%= proDtl.proPath%>', eName: '<%= proDtl.eName%>'};
+      data.cmd = $(this).prop('name');
+      socket.emit('exec', data);
+    })
+  });
+</script>
